@@ -1,62 +1,22 @@
-# Clean data and Load packages
+# Clean data and Load usual packages
 #first run Decipher_PEC.R script
 close.screen(all=TRUE)
 rm(list=ls())
 header=1;
-
-library(sl3)
-library(SuperLearner)
-library(tmle)
-library(earth)
-library(glmnet)
-library(xgboost)
 library(dplyr)
-library(sjPlot)
 
 # load data, remove missing data
-```{r echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
 load(file="ISQoL.RData") 
-
-#Not Dummy for table1
-# mat_A_W_Table1 <- df_all %>% 
-#   dplyr::select(c(Study.Subject.ID,A,
-#     Age,Sex,Education,CENTRE,#Employment,Adresseur,
-#     RQTH,Fam,Marginalisation,Forensic,
-#     Dx,Dx2,Dx_SOMA,Addictions,
-#     GAF,CGI,
-#     First_Contact,N_Admissions,
-#     
-#     SQoL18_SEL:SQoL18_TOT,
-#     WEMWBS_TOT,SERS_TOT,
-#     IS_TOT,IS_Sympt,IS_Disease,IS_Treatment,
-#     ISMI_TOT,#ISMI_Alien,ISMI_Approb,ISMI_Discrim,ISMI_Isol,ISMI_Intern,ISMI_Resist,
-#     STORI)) %>%
-#   #filter(Dx=="SCZ") %>% # & !is.na(A))%>%
-#   filter(Dx=="SCZ"  & !is.na(A))%>%
-#   as.data.frame(stringsAsFactors = TRUE) 
 
 df_all1 <- filter(df_all,Dx=="SCZ"  & !is.na(A)) %>%
   select(-c(Dx,STORI_REBUILDING,STORI_GROWTH,WEMWBS_TOT,SERS_TOT, starts_with("ISMI"))) %>% #ISMI_Alien:ISMI_Resist,
   mutate(A=case_when(IS_TOT>=9 ~ 1,
                      IS_TOT<9 ~0))
 
-##########
-##########
- 
-```
-
 #  Overall correlation between insight and QoL
-```{r warning=FALSE, message=FALSE, echo=FALSE}
 cor.test(df_all1$IS_TOT,df_all1$SQoL18_TOT)
 
-cor.test(df_all1$IS_TOT,df_all1$SQoL18_TOT, method = "spearman")
-
-
-```
-
 #  Table 1
-```{r warning=FALSE, message=FALSE, echo=FALSE}
-
 #remove missing values of outcome only
 df_all=df_all1 %>%
   filter_at(vars(starts_with("SQoL")), all_vars(!is.na(.)))
@@ -72,13 +32,11 @@ Table1_data <- dplyr::select(df_all,-Study.Subject.ID) %>%
            starts_with("SQoL"), starts_with("IS")
            ))
 
-###############
 library(table1)
 my.render.cont <- function(x) {
     with(stats.default(x), 
          sprintf("%0.2f (%0.1f)", MEAN, SD))
 }
-
 
 pvalue <- function(x, ...) {
     # Construct vectors of data y, and groups (strata) g
@@ -104,14 +62,7 @@ table1(~ .
        #,render.continuous=my.render.cont
        ) -> Table1_final
 
-###############
-```
-
- 
-```{r echo=FALSE, eval=FALSE}
-#####
 #Figure 1 - general network plot
-#####
 
 library(qgraph)
 library(huge)
@@ -129,7 +80,7 @@ mat_Y_A_W=df_all
  
  #Insight measures are ordinal, but not QoL dimensions
 Network= Network_df_IS1 %>% mutate(Trt=Trt*2)  %>% 
-  mutate(across(c(Trt,Sym,Dis),#everything(),#
+  mutate(across(c(Trt,Sym,Dis),
                 ~factor(.,order = TRUE))) #TRUE  makes it an ordinal variable
 
  CorMat_IS1=cor_auto(Network, npn.SKEPTIC = TRUE, detectOrdinal = TRUE,
@@ -141,7 +92,8 @@ Network= Network_df_IS1 %>% mutate(Trt=Trt*2)  %>%
              threshold=FALSE, groups=groups, palette="colorblind", edge.labels=TRUE)
  
  #centralityPlot(Q_IS1)
- 
+
+#can use networktools
  b <- bridge(Q_IS1, communities=c('1','1','1',
                                   '2','2','2','2','2','2','2','2'
                                   #,'3','3','3','3','3'#,'3'
