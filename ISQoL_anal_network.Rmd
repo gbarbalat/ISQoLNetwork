@@ -104,17 +104,7 @@ Network= Network_df_IS1 %>% mutate(Trt=Trt*2)  %>%
  bb$`Bridge Closeness`=NULL
 plot(bb, zscore = TRUE, color = FALSE, order="given")
 
-#networktools::assumptionCheck(Network_df_IS1, type="network", plot=TRUE, na.rm=TRUE)
-
-```
-
-
-## Using bootnet for (F2, F3, F4 boot1) and Network checks
-
-``` {r echo=FALSE, eval=FALSE}
-##################
-#
-##################
+#using bootnet for further analysis: fig 2-4 and Supp figures
 library(bootnet)
 library(stringr)
 
@@ -144,9 +134,6 @@ communities=c('1','1','1',
                    #
                    )
     
-```
-
-``` {r}
 #Figure 2-3, within and between-community edges
 
     p=plot(boot1, statistics="edge",labels = TRUE, order = "sample", onlyNonZero = FALSE,
@@ -197,13 +184,7 @@ fig2_3=function(dat, big_title) {
     fig2_3(dat_Ins,"Insight")    
     fig2_3(dat_btw,"Insight--QoL") 
     
-```
 
-
-
-
-
-``` {r}
 #Fig 4 Bridge centrality
 #"bridgeStrength",'bridgeExpectedInfluence'
  p1=plot(boot1, statistics="bridgeExpectedInfluence",labels = TRUE, order = "sample", onlyNonZero = FALSE,
@@ -251,11 +232,9 @@ p2=plot(boot1, statistics="bridgeStrength",labels = TRUE, order = "sample", only
     }
 fig4(dat2, c("bridgeStrength" = "Strength"))   
 fig4(dat1,c("bridgeExpectedInfluence" = "Expected influence"))    
-```
 
-``` {r}
 #plot centrality (non bridge centrality measures)
-#not used in the paper
+#not in the paper
         
         plot="area"; 
         plot="difference"
@@ -279,12 +258,9 @@ fig4(dat1,c("bridgeExpectedInfluence" = "Expected influence"))
                meanColor = "blue", meanlwd = 0.5,#bootstrap mean
                bootColor = "black", bootlwd = 1 #CI
                )
-```
 
-
-``` {r}
     ##########
-    #stability of centrality indices
+    #stability of centrality indices - see Supp Figure 1 and 3
     ##########
     boot2 <- bootnet::bootnet(Network_, nBoots =1000, caseN = 10, type = "case",#nonparametric or case
                               default = "EBICglasso", computeCentrality = TRUE,
