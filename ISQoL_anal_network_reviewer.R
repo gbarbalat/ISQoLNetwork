@@ -40,20 +40,6 @@ goldbricker(Network, threshold=0.1)
 
 #ISQoL network confound
 #our netw anal may be biased by confounders (clinical severity and cognition)
-rm(list=ls())
-load(file="ISQoL.RData") 
-close.screen(all=TRUE)
-header=1;
-
-
-
-df_all1 <- filter(df_all,Dx=="SCZ"  & !is.na(A)) %>%
-  select(-c(Dx,STORI_REBUILDING,STORI_GROWTH,WEMWBS_TOT,SERS_TOT, starts_with("ISMI"))) %>% #ISMI_Alien:ISMI_Resist,
-  mutate(A=case_when(IS_TOT>=9 ~ 1,
-                     IS_TOT<9 ~0))
-df_all=df_all1 %>%
-  filter_at(vars(starts_with("SQoL")), all_vars(!is.na(.)))
-colnames(df_all)
 
 #############################""
 #add MEMCHIF_MCI
@@ -69,25 +55,6 @@ summary(cog_fun)
 
 df_all=df_all %>%
   left_join(cog_fun,by=join_by(Study.Subject.ID==StudySubjectID)) 
-
-
-#############################""
-#median and missingness indicator variable
-task <- make_sl3_Task(
-  data=df_all,
-  covariates = colnames(dplyr::select(df_all,-c(starts_with("SQoL18_"),
-                                                starts_with("ISMI")
-  )
-  )
-  ),
-  outcome = colnames(dplyr::select(df_all,c(starts_with("SQoL18_"),
-                                            starts_with("IS_")
-  )
-  )
-  )
-)
-
-task$data; col_delta=df %>% select(all_of(starts_with("delta"))) %>% colnames()
 
 #############################""
 #mice procedure
@@ -120,6 +87,7 @@ recalculate=function(outcome,i) {
 }
 colnames(df_all)
 
+#redo analysis with this new network
 fig2_3=function(dat, big_title) {
   ggplot(dat,aes(x=id,y=value, colour=var, group=var) )+
     geom_ribbon(aes(ymin = lbound, ymax = ubound), 
@@ -247,7 +215,7 @@ Dis=list()
 SEL=list()
 Trt=list()
 RES=list()
-for (i in 1:5) {
+for (i in 1:5) {#loop through 5 imputed datasets
   
   Dis_SEL[[i]]=dat_btw[[i]] %>% 
     filter(var=="sample") %>%
