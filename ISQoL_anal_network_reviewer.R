@@ -4,7 +4,6 @@
 
 #start similar
 rm(list=ls())
-load(file="ISQoL.RData") 
 library(dplyr)
 library(networktools)
 library(sjPlot)
@@ -208,7 +207,7 @@ dat2[[i]]=p2$data
 
 }#end of for loop through mice datasets
 i=3;fig3[[i]]
-save.image(file="anal_reviewer_confound_all.RData")
+save.image(file="anal_confound_all.RData")
 
 
 #range of edge-weights for sample measures in dat_btw
