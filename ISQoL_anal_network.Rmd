@@ -1,20 +1,4 @@
----
-title: "Association of Insight with quality of life - Network analysis"
-author: "Guillaume Barbalat"
-date: "12/16/2022"
-output:
-  html_document:
-    toc: true
-    toc_float: true
-    toc_depth: 2
-    code_download: true
----
-
-
-# load packages
-```{r warning=FALSE, message=FALSE, eval=TRUE, echo=FALSE, results=FALSE}
-
-# Prelude- Clean data and Load packages
+# Clean data and Load packages
 #first run Decipher_PEC.R script
 close.screen(all=TRUE)
 rm(list=ls())
@@ -28,7 +12,6 @@ library(glmnet)
 library(xgboost)
 library(dplyr)
 library(sjPlot)
-```
 
 # load data, remove missing data
 ```{r echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
