@@ -1,9 +1,14 @@
-#independence btw nodes
+#start similar
 rm(list=ls())
 load(file="ISQoL.RData") 
 library(dplyr)
 library(networktools)
-rm(list=ls())
+library(sjPlot)
+library(stringr)
+library(qgraph)
+library(mice)
+library(ggplot2)
+
 load(file="ISQoL.RData") 
 df_all1 <- filter(df_all,Dx=="SCZ"  & !is.na(A)) %>%
   select(-c(Dx,STORI_REBUILDING,STORI_GROWTH,WEMWBS_TOT,SERS_TOT, starts_with("ISMI"))) %>% #ISMI_Alien:ISMI_Resist,
@@ -27,28 +32,20 @@ Network_df_IS1=data.frame(
 Network= Network_df_IS1 %>% mutate(Trt=Trt*2)  %>% 
   mutate(across(c(Trt,Sym,Dis),#everything(),#
                 ~factor(.,order = TRUE))) #TRUE  makes it an ordinal variable
+
+
+#independence btw nodes
 goldbricker(Network, threshold=0.1)
 
 
 #ISQoL network confound
-#SCZ Bull reviewer comment on the fact that our netw anal may be biased by confounders (clinical severity and cognition)
+#our netw anal may be biased by confounders (clinical severity and cognition)
 rm(list=ls())
 load(file="ISQoL.RData") 
 close.screen(all=TRUE)
 header=1;
 
-library(sl3)
-library(SuperLearner)
-library(tmle)
-library(earth)
-library(glmnet)
-library(xgboost)
-library(dplyr)
-library(sjPlot)
-library(stringr)
-library(qgraph)
-library(mice)
-library(ggplot2)
+
 
 df_all1 <- filter(df_all,Dx=="SCZ"  & !is.na(A)) %>%
   select(-c(Dx,STORI_REBUILDING,STORI_GROWTH,WEMWBS_TOT,SERS_TOT, starts_with("ISMI"))) %>% #ISMI_Alien:ISMI_Resist,
