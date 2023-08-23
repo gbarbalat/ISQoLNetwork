@@ -1,3 +1,7 @@
+#this goes a bit further than ISQoL_anal_network
+#1- it tests for independence between nodes
+#2- it does a network analysis where potential confounding factors have been taken into account
+
 #start similar
 rm(list=ls())
 load(file="ISQoL.RData") 
