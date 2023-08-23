@@ -295,12 +295,9 @@ plot(boot2, statistics = c("Strength","Closeness","Betweenness","ExpectedInfluen
   )
 
 print(bootnet::corStability(boot2))
-```
 
-
-``` {r} 
     # ##########
-    # #testing for significant differences between node
+    # #testing for significant differences between node centrality
     # ##########
     
     pref_order=c("Dis","Sym","Trt","AUT","FAM","FRI","PHY","PSY","RES","ROM","SEL")
@@ -348,7 +345,7 @@ DiffT_2=rbind(DiffT_2,as.data.frame(p[,c(1,2,4,5)]))
       tab_df(DiffT_2)
 
 ##########
-# Supplementary FIGURES (Difference Tests)
+# Supplementary FIGURES 2, 4, 5 (Difference Tests)
 ##########
 new_label_BS <- c("bridgeStrength" = "Bridge strength")
 new_label_EI <- c("bridgeExpectedInfluence" = "Bridge expected influence")
@@ -382,10 +379,6 @@ theme(#legend.position = "none",
   ) +
   facet_wrap(type ~ ., labeller=labeller(type=new_label_EI))
 
-```
-
-``` {r}
-
 SOM_centrality_overall_Network = function(statistics,new_label) {
 #bridge strength - difference plot
 p=plot(boot1, statistics=statistics,plot="difference",order="sample")+
@@ -405,4 +398,4 @@ p1=SOM_centrality_overall_Network("betweenness",c("betweenness" = "Betweenness")
 p2=SOM_centrality_overall_Network("closeness",c("closeness" = "Closeness"))
 p3=SOM_centrality_overall_Network("ExpectedInfluence",c("expectedInfluence" = "Expected Influence"))
 p4=SOM_centrality_overall_Network("strength",c("strength" = "Strength"))
-```
+
