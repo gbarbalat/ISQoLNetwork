@@ -1,5 +1,7 @@
 # ISQoLNetwork
 
+Paper: Differential associations between insight and quality-of-life dimensions among individuals with schizophrenia by Barbalat et al. (2024)  
+
 Preprocessed data = ISQoL.RData  
 
 First set of analysis = ISQoL_anal.R
